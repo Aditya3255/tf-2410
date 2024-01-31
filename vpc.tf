@@ -1,83 +1,83 @@
 #vpc
-resource "aws_vpc" "myntra-vpc" {
+resource "aws_vpc" "ibm-vpc" {
   cidr_block       = "10.0.0.0/16"
   instance_tenancy = "default"
 
   tags = {
-    Name = "myntra"
+    Name = "ibm"
   }
 }
 
 #web subnet
-resource "aws_subnet" "myntra-web-sn" {
-  vpc_id     = aws_vpc.myntra-vpc.id
+resource "aws_subnet" "ibm-web-sn" {
+  vpc_id     = aws_vpc.ibm-vpc.id
   cidr_block = "10.0.0.0/24"
   availability_zone = "ap-south-1a"
   map_public_ip_on_launch ="true"
 
   tags = {
-    Name = "Myntra-web-subnet"
+    Name = "ibm-web-subnet"
   }
 }
 #Database subnet
-resource "aws_subnet" "myntra-db-sn" {
-  vpc_id     = aws_vpc.myntra-vpc.id
+resource "aws_subnet" "ibm-db-sn" {
+  vpc_id     = aws_vpc.ibm-vpc.id
   cidr_block = "10.0.1.0/24"
   availability_zone = "ap-south-1a"
   map_public_ip_on_launch ="false"
 
   tags = {
-    Name = "Myntra-database-subnet"
+    Name = "ibm-database-subnet"
   }
 }
 
 #internet gateway
-resource "aws_internet_gateway" "myntra-igw" {
-  vpc_id = aws_vpc.myntra-vpc.id
+resource "aws_internet_gateway" "ibm-igw" {
+  vpc_id = aws_vpc.ibm-vpc.id
 
   tags = {
-    Name = "myntra-internet-gateway"
+    Name = "ibm-internet-gateway"
   }
 }
 #web route table
-resource "aws_route_table" "myntra-web-rt" {
-  vpc_id = aws_vpc.myntra-vpc.id
+resource "aws_route_table" "ibm-web-rt" {
+  vpc_id = aws_vpc.ibm-vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.myntra-igw.id
+    gateway_id = aws_internet_gateway.ibm-igw.id
   }
 
   
   tags = {
-    Name = "myntra-web-route-table"
+    Name = "ibm-web-route-table"
   }
 }
 #database route table
-resource "aws_route_table" "myntra-database-rt" {
-  vpc_id = aws_vpc.myntra-vpc.id
+resource "aws_route_table" "ibm-database-rt" {
+  vpc_id = aws_vpc.ibm-vpc.id
 
  
   
   tags = {
-    Name = "myntra-database-route-table"
+    Name = "ibm-database-route-table"
   }
 }
 #websubnet association:
-resource "aws_route_table_association" "myntra-web-asc" {
-  subnet_id      = aws_subnet.myntra-web-sn.id
-  route_table_id = aws_route_table.myntra-web-rt.id
+resource "aws_route_table_association" "ibm-web-asc" {
+  subnet_id      = aws_subnet.ibm-web-sn.id
+  route_table_id = aws_route_table.ibm-web-rt.id
 }
 
 #databasesubnet association:
-resource "aws_route_table_association" "myntra-database-asc" {
-  subnet_id      = aws_subnet.myntra-database-sn.id
-  route_table_id = aws_route_table.myntra-database-rt.id
+resource "aws_route_table_association" "ibm-database-asc" {
+  subnet_id      = aws_subnet.ibm-database-sn.id
+  route_table_id = aws_route_table.ibm-database-rt.id
 }
 
 #web nacl
-resource "aws_network_acl" "myntra-web-nacl" {
-  vpc_id = aws_vpc.myntra-vpc.id
+resource "aws_network_acl" "ibm-web-nacl" {
+  vpc_id = aws_vpc.ibm-vpc.id
   ingress {
     protocol   = "tcp"
     rule_no    = 100
@@ -97,12 +97,12 @@ resource "aws_network_acl" "myntra-web-nacl" {
 
 
   tags = {
-    Name = "myntra-web-nacl"
+    Name = "ibm-web-nacl"
   }
 }
 #database nacl
-resource "aws_network_acl" "myntra-database-nacl" {
-  vpc_id = aws_vpc.myntra-vpc.id
+resource "aws_network_acl" "ibm-database-nacl" {
+  vpc_id = aws_vpc.ibm-vpc.id
   ingress {
     protocol   = "tcp"
     rule_no    = 100
@@ -125,24 +125,24 @@ resource "aws_network_acl" "myntra-database-nacl" {
   
 
   tags = {
-    Name = "myntra-database-nacl"
+    Name = "ibm-database-nacl"
   }
 }
 #web-nacl-association
-resource "aws_network_acl_association" "myntra-web-nacl-asc" {
-  network_acl_id = aws_network_acl.myntra-web-nacl.id
-  subnet_id      = aws_subnet.myntra-web-sn.id
+resource "aws_network_acl_association" "ibm-web-nacl-asc" {
+  network_acl_id = aws_network_acl.ibm-web-nacl.id
+  subnet_id      = aws_subnet.ibm-web-sn.id
 }
 #database-nacl-associations
-resource "aws_network_acl_association" "myntra-database-nacl-asc" {
-  network_acl_id = aws_network_acl.myntra-database-nacl.id
-  subnet_id      = aws_subnet.myntra-database-sn.id
+resource "aws_network_acl_association" "ibm-database-nacl-asc" {
+  network_acl_id = aws_network_acl.ibm-database-nacl.id
+  subnet_id      = aws_subnet.ibm-database-sn.id
 }
 #web security group
-resource "aws_security_group" "myntra-web-sg" {
-  name        = "myntra-web-traffic"
+resource "aws_security_group" "ibm-web-sg" {
+  name        = "ibm-web-traffic"
   description = "Allow TLS inbound traffic"
-  vpc_id      = "${aws_vpc.main.id}"
+  vpc_id      = "${aws_vpc.ibm-vpc.id}"
 
   ingress {
     description = "TLS from www"
@@ -166,15 +166,15 @@ resource "aws_security_group" "myntra-web-sg" {
   }
 
   tags = {
-    Name = "myntra-web-sg"
+    Name = "ibm-web-sg"
   }
 }
 
 #database security group
-resource "aws_security_group" "myntra-database-sg" {
-  name        = "myntra-database-traffic"
+resource "aws_security_group" "ibm-database-sg" {
+  name        = "ibm-database-traffic"
   description = "Allow SSH - postgres inbound traffic"
-  vpc_id      = "${aws_vpc.main.id}"
+  vpc_id      = "${aws_vpc.ibm-vpc.id}"
 
   ingress {
     description = "SSH from www"
@@ -198,6 +198,6 @@ resource "aws_security_group" "myntra-database-sg" {
   }
 
   tags = {
-    Name = "myntra-database-sg"
+    Name = "ibm-database-sg"
   }
 }
