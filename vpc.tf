@@ -142,7 +142,7 @@ resource "aws_network_acl_association" "myntra-database-nacl-asc" {
 resource "aws_security_group" "myntra-web-sg" {
   name        = "myntra-web-traffic"
   description = "Allow TLS inbound traffic"
-  vpc_id      = "${aws_vpc.main.id}"
+  vpc_id      = "${aws_vpc.myntra-vpc.id}"
 
   ingress {
     description = "TLS from www"
@@ -174,7 +174,7 @@ resource "aws_security_group" "myntra-web-sg" {
 resource "aws_security_group" "myntra-database-sg" {
   name        = "myntra-database-traffic"
   description = "Allow SSH - postgres inbound traffic"
-  vpc_id      = "${aws_vpc.main.id}"
+  vpc_id      = "${aws_vpc.myntra-vpc.id}"
 
   ingress {
     description = "SSH from www"
