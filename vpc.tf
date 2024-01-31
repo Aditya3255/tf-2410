@@ -9,7 +9,7 @@ resource "aws_vpc" "myntra-vpc" {
 }
 
 #web subnet
-resource "aws_subnet" "myntra-web_sn" {
+resource "aws_subnet" "myntra-web-sn" {
   vpc_id     = aws_vpc.myntra-vpc.id
   cidr_block = "10.0.0.0/24"
   availability_zone = "ap-south-1a"
