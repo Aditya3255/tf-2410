@@ -1,5 +1,5 @@
 #vpc
-resource "aws_vpc" "myntra_vpc" {
+resource "aws_vpc" "myntra-vpc" {
   cidr_block       = "10.0.0.0/16"
   instance_tenancy = "default"
 
@@ -9,33 +9,33 @@ resource "aws_vpc" "myntra_vpc" {
 }
 
 #web subnet
-resource "aws_subnet" "myntra_web_sn" {
-  vpc_id     = aws_vpc.myntra_vpc.id
+resource "aws_subnet" "myntra-web_sn" {
+  vpc_id     = aws_vpc.myntra-vpc.id
   cidr_block = "10.0.0.0/24"
   availability_zone = "ap-south-1a"
   map_public_ip_on_launch ="true"
 
   tags = {
-    Name = "Myntra_web_subnet"
+    Name = "Myntra-web-subnet"
   }
 }
 #Database subnet
-resource "aws_subnet" "myntra_db_sn" {
-  vpc_id     = aws_vpc.myntra_vpc.id
+resource "aws_subnet" "myntra-db-sn" {
+  vpc_id     = aws_vpc.myntra-vpc.id
   cidr_block = "10.0.1.0/24"
   availability_zone = "ap-south-1a"
   map_public_ip_on_launch ="false"
 
   tags = {
-    Name = "Myntra_database_subnet"
+    Name = "Myntra-database-subnet"
   }
 }
 
 #internet gateway
-resource "aws_internet_gateway" "myntra_igw" {
-  vpc_id = aws_vpc.myntra_vpc.id
+resource "aws_internet_gateway" "myntra-igw" {
+  vpc_id = aws_vpc.myntra-vpc.id
 
   tags = {
-    Name = "myntra_internet_gateway"
+    Name = "myntra-internet-gateway"
   }
 }
