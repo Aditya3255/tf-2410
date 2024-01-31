@@ -95,7 +95,6 @@ resource "aws_network_acl" "myntra-web-nacl" {
     to_port    = 65535
   }
 
-  
 
   tags = {
     Name = "myntra-web-nacl"
