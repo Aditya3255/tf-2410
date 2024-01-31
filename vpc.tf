@@ -138,3 +138,34 @@ resource "aws_network_acl_association" "myntra-database-nacl-asc" {
   network_acl_id = aws_network_acl.myntra-database-nacl.id
   subnet_id      = aws_subnet.myntra-database-sn.id
 }
+#web security group
+resource "aws_security_group" "myntra-web-sg" {
+  name        = "myntra-web-traffic"
+  description = "Allow TLS inbound traffic"
+  vpc_id      = "${aws_vpc.main.id}"
+
+  ingress {
+    description = "TLS from www"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    description = "HTTP from www"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "myntra-web-sg"
+  }
+}
