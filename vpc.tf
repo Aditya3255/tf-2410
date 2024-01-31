@@ -71,6 +71,33 @@ resource "aws_route_table_association" "myntra-web-asc" {
 
 #databasesubnet association:
 resource "aws_route_table_association" "myntra-database-asc" {
-  subnet_id      = aws_subnet.myntra-db-sn.id
+  subnet_id      = aws_subnet.myntra-database-sn.id
   route_table_id = aws_route_table.myntra-database-rt.id
+}
+
+#web nacl
+resource "aws_network_acl" "myntra-web-nacl" {
+  vpc_id = aws_vpc.myntra-vpc.id
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 65535
+  }
+  egress {
+    protocol   = "tcp"
+    rule_no    = 200
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 65535
+  }
+
+  
+
+  tags = {
+    Name = "myntra-web-nacl"
+  }
 }
