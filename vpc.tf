@@ -111,6 +111,8 @@ resource "aws_network_acl" "myntra-database-nacl" {
     from_port  = 0
     to_port    = 65535
   }
+
+
   egress {
     protocol   = "tcp"
     rule_no    = 200
@@ -125,4 +127,14 @@ resource "aws_network_acl" "myntra-database-nacl" {
   tags = {
     Name = "myntra-database-nacl"
   }
+}
+#web-nacl-association
+resource "aws_network_acl_association" "myntra-web-nacl-asc" {
+  network_acl_id = aws_network_acl.myntra-web-nacl.id
+  subnet_id      = aws_subnet.myntra-web-sn.id
+}
+#database-nacl-associations
+resource "aws_network_acl_association" "myntra-database-nacl-asc" {
+  network_acl_id = aws_network_acl.myntra-database-nacl.id
+  subnet_id      = aws_subnet.myntra-database-sn.id
 }
